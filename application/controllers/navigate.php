@@ -36,12 +36,31 @@ class navigate extends CI_Controller {
 	{
 		$this->load->view('postbook');
 	}
+	public function deletebookpage()
+	{
+		$data['values'] = $this->connectdatabase->showbook($this->uri->segment(3));
+		$this->load->view('deletebook',$data);
+	}
+	public function deletebook()
+	{
+		$this->connectdatabase->delete($this->uri->segment(3));
+		redirect('navigate/dashboardpage');
+	}
 	public function dashboardpage()
 	{
 		if($this->session->userdata('id')==null)
 			redirect('/navigate/');
 		$data['values'] = $this->connectdatabase->show($this->session->userdata('id'));
+		$data['value']= $this->connectdatabase->showown($this->session->userdata('id'));
 		$this->load->view('dashboard',$data);
+		
+	}
+	public function forrentpage()
+	{
+		if($this->session->userdata('id')==null)
+			redirect('/navigate/');
+		$data['values'] = $this->connectdatabase->showall();
+		$this->load->view('forrent',$data);
 		
 	}
 	public function register()

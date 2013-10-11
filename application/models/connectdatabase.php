@@ -37,12 +37,23 @@ class connectdatabase extends CI_Model
 
 	public function showall()
 	{
+		$this->db->where('owner !=', $this->session->userdata('id'));
 		return $this->db->get('accounts');
 	}
 	public function show($id)
 	{
 		$this->db->where('id',$id);
 		return $this->db->get('accounts');
+	}
+	public function showown($id)
+	{
+		$this->db->where('owner',$id);
+		return $this->db->get('books');
+	}
+	public function showbook($id)
+	{
+		$this->db->where('id',$id);
+		return $this->db->get('books');
 	}
 	public function getemail($id)
 	{
@@ -77,7 +88,8 @@ class connectdatabase extends CI_Model
 	public function delete($id)
 	{
 		$this->db->where('id',$id);
-		$this->db->delete('accounts');
+		$this->db->where('owner',$this->session->userdata('id'));
+		$this->db->delete('books');
 	}
 
 }

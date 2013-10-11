@@ -58,8 +58,7 @@
             <div class="col-md-8 rented form-signin">
               <a class="acordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"> My rented books</a>
               <div id="collapseOne" class="panel-collapse collapse in">
-                <div class="col-md-3"></div>
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
               </div>
             </div>
            
@@ -67,7 +66,23 @@
               <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"> My for rent books</a>
                 <a class="pull-right" href="postbookpage">Post a book for rent</a>
               <div id="collapseTwo" class="panel-collapse collapse in">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+
+               <?php foreach($value->result() as $row){
+                 
+                  echo '<div class="col-md-2"><img src="'.$row->image.'"  class="forrent-img" ></img></div>';
+                  echo '<div class="col-md-4 forrent-sep" > <a href="'.base_url().'index.php/navigate/deletebookpage/'.$row->id.'"class="close" aria-hidden="true">&times;</a>Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
+                    if(strcmp($row->rentedby,""))
+                        echo '<br/>People interested: '.$row->interested; 
+                    else
+                        echo '<br/>Rented by: '.$row->renter.' on '.$row->rentdate;
+
+                  echo '<br/>Posted on: '.$row->dateposted;
+                  echo '</div>';
+                        
+            
+               }?>
+
+               
               </div>
             </div>
           
