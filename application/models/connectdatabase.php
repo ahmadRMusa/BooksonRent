@@ -17,6 +17,23 @@ class connectdatabase extends CI_Model
 
 		return $this->db->insert('accounts',$data);
 	}
+	public function postbook($values)
+	{
+	
+		$data = array(
+				'id' 		=> 0,
+				'image'		=>$values['image'],
+				'title' 	=> $values['title'],
+				'author'		=> $values['author'],
+				'price'		=> $values['price'],
+				'cnum'		=>$values['cnum'],
+				'condition'	=> $values['condition'],
+				'dateposted'=> date('y-j-m'),
+				'owner'		=> $this->session->userdata('id')
+							);
+
+		return $this->db->insert('books',$data);
+	}
 
 	public function showall()
 	{

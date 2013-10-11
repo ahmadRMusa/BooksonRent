@@ -13,20 +13,27 @@
       }
 
       .img-size{
-        height:40%;
-        width:18%;
+        height:200px;
+        width:190px;
         background-color: #fff;
-        float:left;
-        position:relative;
+       
       }
       .details{
         padding-top:8%;
-      padding-right: 50%;
+   
+      }
+      .rented{
+       
+        background-color: #fff;
+      }
+      .forrent{
+        
+        background-color: #fff;
       }
       .form-signin {
-        max-width: 400px;
-        padding: 19px 29px 29px;
-        margin: 0 auto 20px;
+        
+        padding: 9px 19px 19px;
+        margin: 0 auto 10px;
        
         border: 1px solid #e5e5e5;
         -webkit-border-radius: 5px;
@@ -68,64 +75,15 @@ margin-top: 15px;
 .img-bg{
  background-image: url("../img/parallax-3.png");
 }
-.anim-delay {
-animation-delay: 1s;
-}
-.fadeIn {
--webkit-animation-name: fadeIn;
--moz-animation-name: fadeIn;
--o-animation-name: fadeIn;
-animation-name: fadeIn;
-}
-.animated {
--webkit-animation-fill-mode: both;
--moz-animation-fill-mode: both;
--ms-animation-fill-mode: both;
--o-animation-fill-mode: both;
-animation-fill-mode: both;
--webkit-animation-duration: .5s;
--moz-animation-duration: .5s;
--ms-animation-duration: .5s;
--o-animation-duration: .5s;
-animation-duration: .5s;
-}
-.content-rotator div {
-transition: margin-top 0.5s ease-in-out 0s;
-}
-
-.letter:before {
-background: #f6f6f6;
-box-shadow: 0 0 8px rgba(0,0,0,0.2);
-left: -5px;
-top: 4px;
--webkit-transform: rotate(-2.5deg);
-}
-.letter:before, .letter:after {
-content: "";
-height: 98%;
-position: absolute;
-width: 100%;
-z-index: -1;
-}
-
-.letter:after {
-background: #f6f6f6;
-box-shadow: 0 0 3px rgba(0,0,0,0.2);
-right: -3px;
-top: 1px;
--webkit-transform: rotate(5deg);
-}
 
 .letter {
 
-background-color: #78b7b0;
-box-shadow: 0 0 10px rgba(0,0,0,0.3);
-margin: 26px auto 0;
-max-width: 95%;
-min-height:95%;
-padding: 24px;
-position: relative;
-width: 80%;
+
+margin: 15px auto 0;
+max-width: 88%;
+min-height:100%;
+
+width: 100%;
 }
 
 .nav-color{

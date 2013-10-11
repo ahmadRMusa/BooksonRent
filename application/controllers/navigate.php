@@ -31,9 +31,18 @@ class navigate extends CI_Controller {
 	{
 		$this->load->view('register');
 	}
+	
+	public function postbookpage()
+	{
+		$this->load->view('postbook');
+	}
 	public function dashboardpage()
 	{
-		$this->load->view('dashboard');
+		if($this->session->userdata('id')==null)
+			redirect('/navigate/');
+		$data['values'] = $this->connectdatabase->show($this->session->userdata('id'));
+		$this->load->view('dashboard',$data);
+		
 	}
 	public function register()
 	{
@@ -86,11 +95,12 @@ class navigate extends CI_Controller {
 			foreach($data['x']->result() as $row){
 				$exist=$row->email;
 				$pass=$row->password;
+				$id=$row->id;
 			}
 			if(@$exist!=null){
 				if(md5($_POST['password'])==$pass){
 					
-					$this->session->set_userdata(array('email'=>$exist));
+					$this->session->set_userdata(array('id'=>$id));
 					redirect('/navigate/dashboardpage');
 				
 				}else{
@@ -107,47 +117,46 @@ class navigate extends CI_Controller {
 				
 		
 	}
-	public function uploadpic()
-	{ echo "hello nisud ko";
-		$allowedExts = array("gif", "jpeg", "jpg", "png");
-		$temp = explode(".", $_FILES["file"]["name"]);
-		$extension = end($temp);
-		if ((($_FILES["file"]["type"] == "image/gif")
-		|| ($_FILES["file"]["type"] == "image/jpeg")
-		|| ($_FILES["file"]["type"] == "image/jpg")
-		|| ($_FILES["file"]["type"] == "image/pjpeg")
-		|| ($_FILES["file"]["type"] == "image/x-png")
-		|| ($_FILES["file"]["type"] == "image/png"))
-		&& ($_FILES["file"]["size"] < 20000)
-		&& in_array($extension, $allowedExts))
-		  {
-		  if ($_FILES["file"]["error"] > 0)
-		    {
-		    echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
-		    }
-		  else
-		    {
-		    echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-		    echo "Type: " . $_FILES["file"]["type"] . "<br>";
-		    echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-		    echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
+	
+	public function postbook()
+	{
+		if(isset($_POST['submit']))
+		{
+	
+		$config['upload_path'] = './images/';
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['encrypt_name']=true;
+		
+		$this->upload->initialize($config);
+		if ( ! $this->upload->do_upload())
+		{
+			$error = array('error' => $this->upload->display_errors());
 
-		    if (file_exists("upload/" . $_FILES["file"]["name"]))
-		      {
-		      echo $_FILES["file"]["name"] . " already exists. ";
-		      }
-		    else
-		      {
-		      move_uploaded_file($_FILES["file"]["tmp_name"],
-		      "upload/" . $_FILES["file"]["name"]);
-		      echo "Stored in: " . "upload/" . $_FILES["file"]["name"];
-		      }
-		    }
-		  }
+			echo $error['error'];
+		}
 		else
-		  {
-		  echo "Invalid file";
-		  }
+		{
+
+			$data =  $this->upload->data();
+			$values = array(
+					'title' 	=> $_POST['title'],
+					'author'	=> $_POST['author'],
+					'price'		=> $_POST['price'],
+					'condition'	=> $_POST['condition'],
+					'cnum'		=> $_POST['cnum'],
+					'image'		=> base_url().'images/'.$data['file_name']
+			);
+	
+			
+			if($this->connectdatabase->postbook($values)){
+				
+				 redirect('/navigate/dashboardpage');
+			}
+			
+			
+			}
+			
+		}
 	}
 
 }
