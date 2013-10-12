@@ -8,16 +8,18 @@
     	  echo link_tag('css/bootstrap.min.css');
           echo link_tag('css/forrent.css');
        function check($z,$y){
-          $i=explode(",",$z);
-          
+          $i=explode("a",$z);
+          $notpresent=true;
+          echo "nisud";
           for($inc = 0;$inc<count($i);$inc++){
               if($i[$inc] ==$y){
-                 return false;
-              }else{
-                  return true;
+                $notpresent=false;
+                break; 
               }
-              echo $i[$inc];
+                
+              echo "Asadasdadasdada!".$inc;
           }
+          return $notpresent;
           
        }
 	?>

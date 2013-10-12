@@ -80,11 +80,12 @@ class navigate extends CI_Controller {
 		if($this->session->userdata('id')==null)
 			redirect('/navigate/');
 		$data['v']= $this->connectdatabase->showbook($this->uri->segment(3));
+		
 		foreach($data['v']->result() as $row){
 			if($row->interested==0)
-				$i = $this->uri->segment(3);
+				$i = $this->session->userdata('id');
 			else
-			$i=$this->session->userdata('id').','.$row->interested;
+			$i=$this->session->userdata('id').'a'.$row->interested;
 			$d=$row->num_i+1;
 		}
 		echo $i;		

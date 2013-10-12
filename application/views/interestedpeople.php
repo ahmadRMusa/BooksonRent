@@ -1,40 +1,63 @@
 <?php doctype('html5') ?>
 <html>
 <head>
-    <title>Login</title>
+  <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <?php echo link_tag('css/bootstrap.css');
-          echo link_tag('css/bootstrap.min.css');
-        echo link_tag('css/deletebook.css');
-    ?>
+        echo link_tag('css/bootstrap.min.css');
+          echo link_tag('css/interested.css');
+     
+  ?>
 </head>
 <body>
-    <div class="container">
-        <h1>Are you sure you want to delete this post?</h1>
-        <?php echo form_open('navigate/deletebook','class="letter form-signin"');
-         
-            foreach($values->result() as $row){
-           echo '<img src="'.$row->image.'" class="small-size"/>';
-           echo '<h2 class="form-signin-heading">'.$row->name.'</h2>';
-           echo 'Author: '.$row->email.'<br/>';
-           echo 'Date Posted: '.$row->number.'<br/>';
-           
-               
-           echo anchor('navigate/deletebook/'.$row->id,'Delete','class="btn btn-large btn-danger"')."&emsp;";
-           echo anchor('navigate/dashboardpage','Cancel','class="btn btn-large btn-primary"');
-           echo '</form>';
-          }
-        
-      ?>
+<div class="navbar navbar-inverse navbar-fixed-top ">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Books on Rent</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="<?php echo base_url();?>index.php/navigate/dashboardpage">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#contact">For Rent</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" placeholder="Search for a book" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Search</button>
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
     </div>
+    <div class="center"><h1>Books for Rent</h1></div>
+
+  <div class="dummy">
+ <?php foreach($values->result() as $row){
+                 
+                  echo '<div class="col-md-2"></div><div class="col-md-2"><img src="'.$row->image.'"  class="forrent-img" ></img></div>';
+                  echo '<div class="col-md-5 forrent-sep" > Name: '.$row->name.'<br/>Address: '.$row->address.'<br/>Contact number: '.$row->number.'<br/>Emil: '.$row->email.'<br/></div>';
+                  echo '<div class="col-md-11"></div> ';
+            
+               }?>
+             </div>
+
     
-</body>
+     
 
+<script  language="javascript" type="text/javascript" src="<?php echo base_url();?>js/jquery.js"></script>
 
-<script src="<?php echo base_url();?>js/bootstrap.js"></script>
-<script src="<?php echo base_url();?>js/bootstrap.min.js"></script>
-<script src="<?php echo base_url();?>js/jquery.js"></script>
- <script src="<?php echo base_url();?>js/main.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/bootstrap.min.js"></script>
+
+<script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/respond.min.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/html5shiv.js"></script>
+
 </body>
 </html>
