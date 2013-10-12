@@ -41,9 +41,10 @@ width: 100%%;
 
       }
      .dummy{
-     	width:90%;
+     	width:91%;
      	height:90%;
      	margin:auto;
+      padding-left: 12%;
      }
      .checkbox{
        background-color: #8d6ab9;

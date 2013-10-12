@@ -42,9 +42,10 @@
   <div class="dummy">
  <?php foreach($values->result() as $row){
                  
-                  echo '<div class="col-md-2"></div><div class="col-md-2"><img src="'.$row->image.'"  class="forrent-img" ></img></div>';
-                  echo '<div class="col-md-5 forrent-sep" > Name: '.$row->name.'<br/>Address: '.$row->address.'<br/>Contact number: '.$row->number.'<br/>Emil: '.$row->email.'<br/></div>';
-                  echo '<div class="col-md-11"></div> ';
+                  echo '<div class="col-md-2"><img src="'.$row->image.'"  class="forrent-img" ></img></div>';
+                  echo '<div class="col-md-3 forrent-sep" > Name: '.$row->name.'<br/>Address: '.$row->address.'<br/>Contact number: '.$row->number.'<br/>Email: '.$row->email.'<br/><br/><br/>';
+                  echo '<a href="'.base_url().'index.php/navigate/acceptrent/'.$row->id.'a'.$this->uri->segment(3).'" class="center btn btn-warning"> Accept as renter </a></div>';
+                  //echo '<div class="col-md-11"></div> ';
             
                }?>
              </div>

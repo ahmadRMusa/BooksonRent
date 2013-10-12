@@ -41,16 +41,33 @@ class navigate extends CI_Controller {
 		$data['values'] = $this->connectdatabase->showbook($this->uri->segment(3));
 		$this->load->view('deletebook',$data);
 	}
-	public function interestedpeoplepage($interest)
+
+	public function interestedpeople()
 	{
-		$i=explode("a",$interest);
-		
-		
-		$data['values'] = $this->connectdatabase->showi($interest);
-		$data['counter']=count($i);
-		
-		$this->load->view('interestedpeople',$data);
+		$data['values'] = $this->session->userdata('currenti');
+		//$echo $data['values'];
+		foreach($data['values']->result() as $row){
+				echo $row->id;
+		}
+		//$this->load->view('interestedpeople',$data);
 	}
+
+	public function interestedpeoplepage()
+	{
+		
+		
+		$data['values'] = $this->connectdatabase->showi($_POST['people']);
+		$data['post_id']=$_POST['post_id'];
+		echo $_POST['people'];
+		$this->load->view('interestedpeople',$data);
+
+		//($this->session->$userdata->result() as $row){
+		//		echo $row->id;
+		//}
+		//redirect('/navigate/interestedpeople');
+		//$this->load->view('dashboard',$data);
+	}
+	
 	public function deletebook()
 	{
 		$this->connectdatabase->delete($this->uri->segment(3));
@@ -73,6 +90,14 @@ class navigate extends CI_Controller {
 		$data['values'] = $this->connectdatabase->showall();
 		$data['value']= $this->session->userdata('id');
 		$this->load->view('forrent',$data);
+		
+	}
+	public function acceptrent()
+	{
+		//$data['values'] = $this->connectdatabase->showall();
+		//$data['value']= $this->session->userdata('id');
+		//$this->load->view('forrent',$data);
+		echo "it worked";
 		
 	}
 	public function iminterested()
@@ -199,7 +224,7 @@ class navigate extends CI_Controller {
 					'price'		=> $_POST['price'],
 					'condition'	=> $_POST['condition'],
 					'cnum'		=> $_POST['cnum'],
-					'image'		=> base_url().'images/'.$data['file_name']
+					'image'		=> 'images/'.$data['file_name']
 			);
 	
 			

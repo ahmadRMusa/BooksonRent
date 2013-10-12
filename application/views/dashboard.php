@@ -8,7 +8,7 @@
     	  echo link_tag('css/bootstrap.min.css');
           echo link_tag('css/dashboard.css');
        
-	?>
+	?><script  language="javascript" type="text/javascript" src="<?php echo base_url();?>js/jquery.js"></script>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top ">
@@ -69,23 +69,33 @@
 
                <?php foreach($value->result() as $row){
                  
-                  echo '<div class="col-md-2"><img src="'.$row->image.'"  class="forrent-img" ></img></div>';
+                  echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></div>';
                   echo '<div class="col-md-4 forrent-sep" > <a href="'.base_url().'index.php/navigate/deletebookpage/'.$row->id.'"class="close" aria-hidden="true">&times;</a>Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
-                    if(strcmp($row->rentedby,"")){
-                        if($row->num_i!=0)
-                          echo '<br/>People interested: <a href="'.base_url().'index.php/navigate/interestedpeoplepage/'.$row->interested.'">'.$row->num_i."</a>"; 
-                        else
+                  if(strcmp($row->rentedby,"")){
+                        if($row->num_i!=0){
+                          //echo '<br/>People interested: <a href="'.base_url().'index.php/navigate/interestedpeoplepage/'.$row->interested.'/'.$row->id.'">'.$row->num_i."</a>"; 
+                          echo '<br/>People interested:<button class="button'.$row->id.'">'.$row->id.'</button>';
+                          
+                          interestedAJAX($row->id,$row->interested);
+                        }else
                           echo '<br/>People interested: '.$row->num_i;
                     }else
                         echo '<br/>Rented by: '.$row->renter.' on '.$row->rentdate;
 
+
                   echo '<br/>Posted on: '.$row->dateposted;
                   echo '</div>';
+                  echo '<form name="m'.$row->id.'" action="'.base_url().'index.php/navigate/interestedpeoplepage" method="POST">
+                                  <input type="hidden" value="'.$row->id.'" name="post_id" />
+                                  <input type="hidden" value="'.$row->interested.'" name="people" />
+                                </form>';
                         
             
                }?>
 
-               
+               <?php //$ci =& get_instance();
+                 // echo $ci->session->userdata('id');
+               ?>
               </div>
             </div>
           
@@ -97,9 +107,15 @@
       </div>
 
     
-     
+ <!---AJAX FOR SEARCHING INTERESTED USbgt5ERS-->
+<?php 
+function interestedAJAX($id,$interested){
+  echo "<script type='text/javascript'>$('.button".$id."').click(function() { $.ajax({url: '".base_url()."index.php/navigate/interestedpeoplepage',type: 'POST',data: { post_id:'".$id."', people:'".$interested."'},success: function (result) { document.m".$id.".submit();} }); });</script>";
+}
+?>
+</script>
 
-<script  language="javascript" type="text/javascript" src="<?php echo base_url();?>js/jquery.js"></script>
+
 
 <script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/bootstrap.min.js"></script>
 
