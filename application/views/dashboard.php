@@ -26,7 +26,7 @@
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><a href="#contact">For Rent</a></li>
+            <li><a href="<?php echo base_url();?>index.php/navigate/forrentpage">For Rent</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <div class="form-group">
@@ -71,9 +71,12 @@
                  
                   echo '<div class="col-md-2"><img src="'.$row->image.'"  class="forrent-img" ></img></div>';
                   echo '<div class="col-md-4 forrent-sep" > <a href="'.base_url().'index.php/navigate/deletebookpage/'.$row->id.'"class="close" aria-hidden="true">&times;</a>Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
-                    if(strcmp($row->rentedby,""))
-                        echo '<br/>People interested: '.$row->interested; 
-                    else
+                    if(strcmp($row->rentedby,"")){
+                        if($row->num_i!=0)
+                          echo '<br/>People interested: <a href="'.base_url().'index.php/navigate/interestedpeoplepage/'.$row->interested.'">'.$row->num_i."</a>"; 
+                        else
+                          echo '<br/>People interested: '.$row->num_i;
+                    }else
                         echo '<br/>Rented by: '.$row->renter.' on '.$row->rentdate;
 
                   echo '<br/>Posted on: '.$row->dateposted;

@@ -41,6 +41,16 @@ class navigate extends CI_Controller {
 		$data['values'] = $this->connectdatabase->showbook($this->uri->segment(3));
 		$this->load->view('deletebook',$data);
 	}
+	public function interestedpeoplepage($interest)
+	{
+		$i=explode("a",$interest);
+		
+		
+		$data['values'] = $this->connectdatabase->showi($interest);
+		$data['counter']=count($i);
+		
+		$this->load->view('interestedpeople',$data);
+	}
 	public function deletebook()
 	{
 		$this->connectdatabase->delete($this->uri->segment(3));
@@ -52,6 +62,7 @@ class navigate extends CI_Controller {
 			redirect('/navigate/');
 		$data['values'] = $this->connectdatabase->show($this->session->userdata('id'));
 		$data['value']= $this->connectdatabase->showown($this->session->userdata('id'));
+		$data['val']= $this->connectdatabase->showownrent($this->session->userdata('id'));
 		$this->load->view('dashboard',$data);
 		
 	}
@@ -60,7 +71,31 @@ class navigate extends CI_Controller {
 		if($this->session->userdata('id')==null)
 			redirect('/navigate/');
 		$data['values'] = $this->connectdatabase->showall();
+		$data['value']= $this->session->userdata('id');
 		$this->load->view('forrent',$data);
+		
+	}
+	public function iminterested()
+	{
+		if($this->session->userdata('id')==null)
+			redirect('/navigate/');
+		$data['v']= $this->connectdatabase->showbook($this->uri->segment(3));
+		foreach($data['v']->result() as $row){
+			if($row->interested==0)
+				$i = $this->uri->segment(3);
+			else
+			$i=$this->session->userdata('id').','.$row->interested;
+			$d=$row->num_i+1;
+		}
+		echo $i;		
+		$values = array(
+					'id' 	=> $this->uri->segment(3),
+					'interested'=> $i,
+					'num_i'		=> $d
+			);
+			
+		$this->connectdatabase->iminterested($values);
+		redirect('navigate/forrentpage');
 		
 	}
 	public function register()

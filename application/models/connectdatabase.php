@@ -38,11 +38,31 @@ class connectdatabase extends CI_Model
 	public function showall()
 	{
 		$this->db->where('owner !=', $this->session->userdata('id'));
-		return $this->db->get('accounts');
+		return $this->db->get('books');
+	}
+	public function iminterested($values)
+	{
+		$data = array(
+				'interested'=>$values['interested'],
+				'num_i' => $values['num_i']
+							);
+		$this->db->where('id',$values['id']);
+		
+		return $this->db->update('books',$data);
+		
 	}
 	public function show($id)
 	{
 		$this->db->where('id',$id);
+
+		return $this->db->get('accounts');
+	}
+	public function showi($id)
+	{	$n=explode("a",$id);
+		$this->db->where('id',$n[0]);
+		for($b=1;$b<count($n);$b++){
+			$this->db->or_where('id', $n[$b]);
+		} 
 		return $this->db->get('accounts');
 	}
 	public function showown($id)
@@ -50,6 +70,21 @@ class connectdatabase extends CI_Model
 		$this->db->where('owner',$id);
 		return $this->db->get('books');
 	}
+	public function showownrent($id)
+	{
+		$this->db->like('interested',','.$id.',');
+		$this->db->or_like('interested',','.$id);
+		$this->db->or_like('owner',$id);
+		return $this->db->get('books');
+	}
+	public function showinterested($id)
+	{
+		$this->db->like('interested',','.$id.',');
+		$this->db->or_like('interested',','.$id);
+		$this->db->or_like('owner',$id);
+		return $this->db->get('books');
+	}
+
 	public function showbook($id)
 	{
 		$this->db->where('id',$id);
