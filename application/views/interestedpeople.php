@@ -23,16 +23,16 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="<?php echo base_url();?>index.php/navigate/dashboardpage">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#contact">For Rent</a></li>
+            <li  class="active" ><a href="<?php echo base_url();?>index.php/navigate/dashboardpage">Home</a></li>
+            
+            <li><a href="<?php echo base_url();?>index.php/navigate/forrentpage">For Rent</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
+          <form class="navbar-form navbar-right" action="<?php echo base_url();?>index.php/navigate/searchpage" method="POST">
             <div class="form-group">
-              <input type="text" placeholder="Search for a book" class="form-control">
+              <input type="text" placeholder="Search for a book" class="form-control" name="userquery"/>
             </div>
-            <button type="submit" class="btn btn-success">Search</button>
+            <button class="btn btn-success">Search</button>
+            <a href="<?php echo base_url();?>index.php/navigate/logout" class="btn btn-danger">Logout</a>
           </form>
         </div><!--/.navbar-collapse -->
       </div>
@@ -44,7 +44,7 @@
       <?php $x=$post_id;?>
  <?php foreach($values->result() as $row){
                  
-                  echo '<div class="col-lg-4 colorize"><center><img src="'.$row->image.'"  class="forrent-img" ></img></center>';
+                  echo '<div class="col-lg-4 colorize"><center><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></center>';
                   echo '<br/><p> Name: '.$row->name.'<br/>Address: '.$row->address.'<br/>Contact number: '.$row->number.'<br/>Email: '.$row->email.'<br/>';
                   echo '<a  data-toggle="modal" href="#myModal'.$row->id.'" class="center btn btn-warning"> Accept as renter </a><br/></p></div>';
                   

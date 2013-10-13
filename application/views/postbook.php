@@ -13,9 +13,11 @@
 </head>
 <body>
   <div class="container">
-    <?php echo form_open_multipart('navigate/postbook','class="form-signin letter"');?>
+    <?php echo form_open_multipart('navigate/postbook','class="form-signin letter" id="form1" name="form1"');?>
         <fieldset>
+
             <h1 class="center">Post your book for rent</h1>
+            <div id="error"></div>
             <div class="fileupload fileupload-new" data-provides="fileupload">
              <div class="fileupload-preview thumbnail" style="width: 200px; height: 150px;"></div>
                  <div>
@@ -26,38 +28,38 @@
             <div class="control-group">
                 <label class="control-label">Title:</label>
                 <div class="controls">
-                    <input type="text" id="username" name="title" placeholder="Books on Rent: A guide">
+                    <input type="text" id="title" name="title" placeholder="Books on Rent: A guide">
                 </div>
 
             </div>
             <div class="control-group">
                 <label class="control-label">Author:</label>
                 <div class="controls">
-                    <input type="text" id="username" name="author" placeholder="Jondoe">
+                    <input type="text" id="author" name="author" placeholder="Jondoe">
                     
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Rent Price:(in Pesos)</label>
                 <div class="controls">
-                    <input type="text" id="email" name="price" placeholder="Ex. 100">
+                    <input type="text" id="price" name="price" placeholder="Ex. 100">
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Contact Number:</label>
                 <div class="controls">
-                    <input type="text"  name="cnum" placeholder="093245466422">
+                    <input type="text" id="num"  name="cnum" placeholder="093245466422">
                 </div>
             <div class="control-group">
                 <label class="control-label">Book Condition:</label>
                 <div class="controls">
-                    <textarea name="condition" style="width:80%;" >Ex. Slightly used, some parts torn,etc...</textarea>
+                    <textarea id="conditions" name="condition" style="width:80%;"  placeholder="Ex. Slightly used, some parts torn,etc..."></textarea>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label"></label>
                 <div class="controls center">
-                    <button type="submit" class="btn btn-success btn-large" name="submit">Submit</button>
+                    <a id="presubmit" class="btn btn-success btn-large"  onclick="acceptpost()">Submit</a>
                     <?php echo anchor('navigate/dashboardpage','Cancel','class="btn btn-large btn-primary btn-danger"');?>
                 </div>
             </div>
@@ -66,8 +68,47 @@
     </form>
 </div>
 
-    
-</body>
+   
+
+  
+
+<script type="text/javascript">
+            function acceptpost(){
+              var title= document.getElementById("title").value;
+              var f= document.getElementById("file1").value;
+
+              var author= document.getElementById("author").value;
+              var price= document.getElementById("price").value;
+              var num= document.getElementById("num").value;
+              var con= document.getElementById("conditions").value;
+              document.getElementById("error").innerHTML ="";
+              
+              if(!f){
+                    document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Please select an image</div>";
+              }else if(title.length>25 || title.length<1){
+                 document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Too long/short title!</div>";
+              }else if(author.length>25 || author.length<1){
+                document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Too long/short author!</div>";
+              }else if( !(/^[0-9]+$/.test(price))){
+                document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Invalid price format</div>";
+              }else if(price>20000){
+                document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">You have exceeded the maximum price of 20,000!</div>";
+              }else if(price.length<1){
+                document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Invalid Price</div>";
+              }else if(!(/^[0-9]+$/.test(num))){
+                document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Invalid cellphone number!</div>";
+              }else if(num.length>12 || num.length<5){
+                document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Invalid cellphone number!</div>";
+            }else if(con.length>25 || con.length<5){
+                document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">The condition field has a limit of 25 characters and minimum of 5 characters</div>";
+              } else{
+                  document.form1.submit();
+              }
+                
+            }
+
+</script>
+
 
 
 

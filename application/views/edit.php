@@ -13,10 +13,10 @@
 </head>
 <body>
   <div class="container">
-    <?php echo form_open_multipart('navigate/register','class="form-signin letter" name="form1" id="form1"');?>
+    <?php echo form_open_multipart('navigate/updateprofile','class="form-signin letter" name="form1" id="form1"');?>
     
         <fieldset>
-            <h1 class="center">Registration Form</h1>
+            <h1 class="center">Edit your Data</h1>
             <div id="error"></div>
              <div class="fileupload fileupload-new" data-provides="fileupload">
   <div class="fileupload-preview thumbnail" style="width: 200px; height: 150px;"></div>
@@ -25,11 +25,11 @@
     <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
   </div>
 </div>
-        
-            <div class="control-group">
+        <?php foreach($values->result() as $row){
+         echo   '<div class="control-group">
                 <label class="control-label">Email:</label>
                 <div class="controls">
-                    <input type="text" id="email" name="email" placeholder="jondoe@booksonrent.com">
+                    <input type="text" id="email" name="email" value="'.$row->email.'">
                 </div>
 
             </div>
@@ -43,28 +43,28 @@
             <div class="control-group">
                 <label class="control-label">Full Name</label>
                 <div class="controls">
-                    <input type="text" id="name" name="name" placeholder="Jondoe K. Luther">
+                    <input type="text" id="name" name="name" placeholder="Jondoe K. Luther" value="'.$row->name.'">
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Contact Number:</label>
                 <div class="controls">
-                    <input type="text" id="num" name="number" placeholder="093245466422">
+                    <input type="text" id="num" name="number" placeholder="093245466422" value="'.$row->number.'">
                 </div>
             <div class="control-group">
                 <label class="control-label">Address:</label>
                 <div class="controls">
-                    <input type="text" id="adds" name="address" placeholder="Cebu,City Philippines">
+                    <input type="text" id="adds" name="address" placeholder="Cebu,City Philippines" value="'.$row->address.'">
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group">';}?>
                 <label class="control-label"></label>
                 <div class="controls center">
                     <a class="btn btn-success btn-large" onclick="acceptpost1()">Submit</a>
                     <?php echo anchor('navigate/','Cancel','class="btn btn-large btn-primary btn-danger"');?>
                 </div>
             </div>
-
+           
         </fieldset>
     </form>
 </div>
@@ -83,9 +83,7 @@
               var add= document.getElementById("adds").value;
               document.getElementById("error").innerHTML ="";
               
-              if(!f){
-                    document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Please select an image</div>";
-              }else if(p!=p1){
+               if(p!=p1){
                  document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Password doesnt match</div>";
               }else if(email.length<1){
                 document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Email required</div>";

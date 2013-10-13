@@ -12,9 +12,11 @@
 <body>
     <div class="container">
       
-        <?php echo form_open('navigate/verify_user','class="letter form-signin"');?>
+        <?php echo form_open('navigate/verify_user','class="letter form-signin"');
+
+        ?>
         <img src="<?php echo base_url();?>img/logo.png" class="img-circle small-size"/>
-        <h2 class="form-signin-heading">Books on Rent</h2>
+        <h2 class="form-signin-heading">Books on Rent</h2><?php echo @$error;?><br/>
         <input type="text" class="input-block-level" name="email" placeholder="Email address"><br/>
         <input type="password" class="input-block-level" name="password" placeholder="Password"></br>
         <button class="btn btn-large btn-primary" name="submit" type="submit">Sign in</button>
@@ -26,18 +28,13 @@
      <div class="dot-bg anim-delay animated fadeIn">
                     <div class="content-rotator">
                         <div class="inbox">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-                            aliquam vehicula est, sed fermentum nulla interdum
-                            vehicula est, sed fermentum nulla interdum vel.
+                            Ever wanted to find someone willing to lend their books?
                         </div>
                         <div class="inbox">
-                            Aliquam vehicula est, sed fermentum nulla interdum vel. Integer
-                            Lorem ipsum dolor sit amet, consectetur adipiscing!
+                            Now its possible with BooksonRent.com!
                         </div>
                         <div class="inbox">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-                            Aliquam vehicula est, sed fermentum nulla
-                            ullamcorper cursus tellus.
+                            Join now and get started :)
                         </div>
                     </div>
       </div>

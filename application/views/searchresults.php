@@ -1,7 +1,7 @@
 <?php doctype('html5') ?>
 <html>
 <head>
-	<title>For Rent</title>
+	<title>Search...</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <?php echo link_tag('css/bootstrap.css');
@@ -10,14 +10,14 @@
        function check($z,$y){
           $i=explode("a",$z);
           $notpresent=true;
-         
+          
           for($inc = 0;$inc<count($i);$inc++){
               if($i[$inc] ==$y){
                 $notpresent=false;
                 break; 
               }
                 
-             
+              
           }
           return $notpresent;
           
@@ -37,9 +37,9 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-             <li ><a href="<?php echo base_url();?>index.php/navigate/dashboardpage">Home</a></li>
+            <li  class="active" ><a href="<?php echo base_url();?>index.php/navigate/dashboardpage">Home</a></li>
             
-            <li class="active"><a href="<?php echo base_url();?>index.php/navigate/forrentpage">For Rent</a></li>
+            <li><a href="<?php echo base_url();?>index.php/navigate/forrentpage">For Rent</a></li>
           </ul>
           <form class="navbar-form navbar-right" action="<?php echo base_url();?>index.php/navigate/searchpage" method="POST">
             <div class="form-group">
@@ -51,12 +51,11 @@
         </div><!--/.navbar-collapse -->
       </div>
     </div>
-
-   <div class="center" style="margin-top:50px;"><h1>Books for Rent</h1></div>
+    <div class="center" style="margin-top:50px;"><h1>Search Results</h1></div>
 
   <div class="dummy">
  <?php $isnull=true;
-  foreach($values->result() as $row){
+    foreach($values->result() as $row){
                  $isnull=false;
                   echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></div>';
                   echo '<div class="col-md-4 forrent-sep" > Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Owner\'s Name: '.$row->ownername.'<br/>Rent Price: '.$row->price.'<br/>Contact number: '.$row->cnum;
@@ -75,12 +74,9 @@
                         
             
                }
-                if($isnull){
+               if($isnull){
                 echo "<center>No results found...</center>";
-             }
-
-
-               ?>
+             }?>
              </div>
 
     

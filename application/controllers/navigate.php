@@ -21,15 +21,23 @@ class navigate extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('connectdatabase');	
+
 			
 	}
+	public function searchpage(){
+		$data['value']= $this->session->userdata('id');
+		$data['values'] = $this->connectdatabase->search($_POST['userquery']);
+		$this->load->view('searchresults',$data);
+
+	}
 	public function display(){
-		
+		if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		$data['values'] = $this->connectdatabase->show($_POST['p']);
 
 		foreach($data['values']->result() as $row)
             {
-                echo '<img style="height:120;width:100px;" src="'.$row->image.'"></img>';
+                echo '<img style="height:120;width:100px;" src="'.base_url().$row->image.'"></img>';
                 echo '<br/>Personal Details:<br/> ';
                 echo '<ul><li>Full Name: '.$row->name.'</li>';                    
                 echo '<li>Email: '.$row->email.'</li>'; 
@@ -41,7 +49,8 @@ class navigate extends CI_Controller {
             
 	}
 	public function updateP(){
-		
+		if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		$trueA['amt']=$this->connectdatabase->refreshUpdate($_POST['post']);
 		foreach($trueA['amt']->result() as $row)
             {	
@@ -96,13 +105,20 @@ class navigate extends CI_Controller {
 	{
 		$this->load->view('register');
 	}
+	public function editpage()
+	{
+		$data['values'] = $this->connectdatabase->show($this->session->userdata('id'));
+		$this->load->view('edit',$data);
+	}
 	
 	public function postbookpage()
-	{
+	{	if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		$this->load->view('postbook');
 	}
 	public function deletebookpage()
-	{
+	{	if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		$data['values'] = $this->connectdatabase->showbook($this->uri->segment(3));
 		$this->load->view('deletebook',$data);
 	}
@@ -110,7 +126,8 @@ class navigate extends CI_Controller {
 
 	public function interestedpeoplepage()
 	{	
-	
+		if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		
 		$data['values'] = $this->connectdatabase->showi($_POST['people']);
 		$data['post_id']=$_POST['post_id'];
@@ -122,6 +139,8 @@ class navigate extends CI_Controller {
 	
 	public function deletebook()
 	{
+			if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		$this->connectdatabase->delete($this->uri->segment(3));
 		redirect('navigate/dashboardpage');
 	}
@@ -129,6 +148,9 @@ class navigate extends CI_Controller {
 	{
 		if($this->session->userdata('id')==null)
 			redirect('/navigate/');
+
+		$data['rentnot']= $this->connectdatabase->showrenteditems($this->session->userdata('id'));
+		$data['rentpaid']= $this->connectdatabase->showrenteditems($this->session->userdata('id'));
 		$data['values'] = $this->connectdatabase->show($this->session->userdata('id'));
 		$data['value']= $this->connectdatabase->showown($this->session->userdata('id'));
 		$data['value1']= $this->connectdatabase->showown($this->session->userdata('id'));
@@ -145,13 +167,16 @@ class navigate extends CI_Controller {
 		$this->load->view('forrent',$data);
 		
 	}
+	public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect('navigate/');
+		
+	}
 	public function acceptrent()
 	{
-		//$data['values'] = $this->connectdatabase->showall();
-		//$data['value']= $this->session->userdata('id');
-		//$this->load->view('forrent',$data);
-		echo "it worked";
-		echo $_POST['initialp']." ".$_POST['renter']." ".$_POST['booknum'];
+		if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		$values = array(
 					'id'		=>$_POST['booknum'],
 					'payment' 	=> $_POST['initialp'],
@@ -188,8 +213,6 @@ class navigate extends CI_Controller {
 	public function register()
 	{
 		
-		if(isset($_POST['submit']))
-		{
 	
 		$config['upload_path'] = './images/';
 		$config['allowed_types'] = 'gif|jpg|png';
@@ -212,7 +235,7 @@ class navigate extends CI_Controller {
 					'name'		=> $_POST['name'],
 					'number'	=> $_POST['number'],
 					'address'	=> $_POST['address'],
-					'image'		=> base_url().'images/'.$data['file_name']
+					'image'		=> 'images/'.$data['file_name']
 			);
 	
 			
@@ -223,10 +246,60 @@ class navigate extends CI_Controller {
 			
 			
 		}
+
+		public function updateprofile()
+	{
+		
+		if($_POST['input1']==null){
+				$values = array(
+					'email' 	=> $_POST['email'],
+					'password'	=> $_POST['password'],
+					'name'		=> $_POST['name'],
+					'number'	=> $_POST['number'],
+					'address'	=> $_POST['address']
+					
+			);
+		if($this->connectdatabase->updateprof($values)){
+				
+				 $this->dashboardpage();
+			}
+		}else{
+		$config['upload_path'] = './images/';
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['encrypt_name']=true;
+		
+		$this->upload->initialize($config);
+		if ( ! $this->upload->do_upload())
+		{
+			$error = array('error' => $this->upload->display_errors());
+
+			echo $error['error'];
+		}
+		else
+		{
+
+			$data =  $this->upload->data();
+			$values = array(
+					'email' 	=> $_POST['email'],
+					'password'	=> $_POST['password'],
+					'name'		=> $_POST['name'],
+					'number'	=> $_POST['number'],
+					'address'	=> $_POST['address'],
+					'image'		=> 'images/'.$data['file_name']
+			);
+	
+			
+			if($this->connectdatabase->updateprof1($values)){
+				
+				 $this->dashboardpage();
+			}
+			
+			
+		}}
 			
 
 		
-	}
+	
 		
 
 	}
@@ -235,25 +308,27 @@ class navigate extends CI_Controller {
 			$data['x']= $this->connectdatabase->getemail($_POST['email']);
 			foreach($data['x']->result() as $row){
 				$exist=$row->email;
+				$ownname=$row->name;
 				$pass=$row->password;
 				$id=$row->id;
 			}
 			if(@$exist!=null){
 				if(md5($_POST['password'])==$pass){
 					
-					$this->session->set_userdata(array('id'=>$id));
+					$this->session->set_userdata(array('id'=>$id,'ownname'=>$ownname));
+					
 					redirect('/navigate/dashboardpage');
 				
 				}else{
 					
 					$d['error']="Invalid password!";
-				//$this->load->view('login',$d);
-					echo "password!";
+				$this->load->view('login',$d);
+					
 				}
 			}else{
 				$d['error']="Invalid username!";
-				echo "uname!";
-				//$this->load->view('login',$d);
+				
+				$this->load->view('login',$d);
 			}
 				
 		
@@ -261,9 +336,8 @@ class navigate extends CI_Controller {
 	
 	public function postbook()
 	{
-		if(isset($_POST['submit']))
-		{
-	
+		if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		$config['upload_path'] = './images/';
 		$config['allowed_types'] = 'gif|jpg|png';
 		$config['encrypt_name']=true;
@@ -286,6 +360,7 @@ class navigate extends CI_Controller {
 					'condition'	=> $_POST['condition'],
 					'cnum'		=> $_POST['cnum'],
 					'image'		=> 'images/'.$data['file_name']
+					
 			);
 	
 			
@@ -297,7 +372,7 @@ class navigate extends CI_Controller {
 			
 			}
 			
-		}
+		
 	}
 
 }

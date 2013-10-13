@@ -1,7 +1,7 @@
 <?php doctype('html5') ?>
 <html>
 <head>
-	<title>Login</title>
+	<title>Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <?php echo link_tag('css/bootstrap.css');
@@ -23,16 +23,16 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li  class="active" ><a href="<?php echo base_url();?>index.php/navigate/dashboardpage">Home</a></li>
+            
             <li><a href="<?php echo base_url();?>index.php/navigate/forrentpage">For Rent</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
+          <form class="navbar-form navbar-right" action="<?php echo base_url();?>index.php/navigate/searchpage" method="POST">
             <div class="form-group">
-              <input type="text" placeholder="Search for a book" class="form-control">
+              <input type="text" placeholder="Search for a book" class="form-control" name="userquery"/>
             </div>
-            <button type="submit" class="btn btn-success">Search</button>
+            <button class="btn btn-success">Search</button>
+            <a href="<?php echo base_url();?>index.php/navigate/logout" class="btn btn-danger">Logout</a>
           </form>
         </div><!--/.navbar-collapse -->
       </div>
@@ -44,8 +44,8 @@
          <div class="letter" id="accordion">
            <?php foreach($values->result() as $row)
             {
-                echo '<div class="col-md-3"><img class="img-size" src="'.$row->image.'"></img></div>';
-                echo '<div class="col-md-4 details">Personal Details:<br/> ';
+                echo '<div class="col-md-3"><img class="img-size" src="'.base_url().$row->image.'"></img></div>';
+                echo '<div class="col-md-4 details">Personal Details:<a href="'.base_url().'index.php/navigate/editpage" class="link">[edit]</a><br/> ';
                 echo '<ul><li>Full Name: '.$row->name.'</li>';                    
                 echo '<li>Email: '.$row->email.'</li>'; 
                 echo '<li>Address: '.$row->address.'</li>';
@@ -58,7 +58,71 @@
             <div class="col-md-8 rented form-signin">
               <a class="acordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"> My rented books</a>
               <div id="collapseOne" class="panel-collapse collapse in">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  <ul id="myTab1" class="nav nav-tabs">
+                      <li class=""><a href="#paid" data-toggle="tab">Fully Paid</a></li>
+                      <li class="active"><a href="#unpaid" data-toggle="tab">On Going</a></li>
+                 </ul>
+                   <div id="myTabContent1" class="tab-content">
+        <div class="tab-pane fade" id="paid">
+          <?php foreach($rentpaid->result() as $row){
+                 if($row->payment==$row->price){
+                       
+                   echo '<div>';
+                    echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></div>';
+                    echo '<div class="col-md-4 forrent-sep" >Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
+                    echo '<br/>Payments: '.$row->payment;  
+                    echo '<br/>Owner: '.$row->ownername;   
+                    echo '<br/>Contact number: '.$row->cnum;
+                    echo '<br/>Progress: '.calculate($row->payment,$row->price).'%';
+                        echo '<div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="'.calculate($row->payment,$row->price).'" aria-valuemin="0" aria-valuemax="100" style="width: '.calculate($row->payment,$row->price).'%;">
+                             
+                              </div>
+                              </div>';
+                     
+                         echo '</div>';
+                         
+                   
+                         echo '</div>';
+                     }   
+            
+               }?>
+        </div>
+        <div class="tab-pane fade active in" id="unpaid">
+            <?php  foreach($rentnot->result() as $row){
+
+              if($row->price!=$row->payment) {
+                    echo '<div>';
+                    echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></div>';
+                    echo '<div class="col-md-4 forrent-sep" >Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
+                    echo '<br/>Payments: '.$row->payment; 
+                    echo '<br/>Owner: '.$row->ownername;     
+                    echo '<br/>Contact number: '.$row->cnum;
+                    echo '<br/>Progress: '.calculate($row->payment,$row->price).'%';
+                        echo '<div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="'.calculate($row->payment,$row->price).'" aria-valuemin="0" aria-valuemax="100" style="width: '.calculate($row->payment,$row->price).'%;">
+                             
+                              </div>
+                              </div>';
+                     
+                         echo '</div>';
+                         
+                   
+                         echo '</div>';
+                         
+                    }
+
+                                   
+                              
+                        
+            
+               }?>
+        </div>
+      </div>
+
+
+
+
               </div>
             </div>
            
@@ -70,8 +134,6 @@
                       <li class=""><a href="#pending" data-toggle="tab">Pending</a></li>
                       <li class="active"><a href="#ongoing" data-toggle="tab">On Rent</a></li>
                  </ul>
-               
-       
 
 
        
