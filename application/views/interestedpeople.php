@@ -37,21 +37,82 @@
         </div><!--/.navbar-collapse -->
       </div>
     </div>
-    <div class="center"><h1>Books for Rent</h1></div>
-
-  <div class="dummy">
+    <div class="header"><h1>People interested in your book:</h1></div>
+    <hr></hr>
+  <div class="container">
+    <div class="row">
+      <?php $x=$post_id;?>
  <?php foreach($values->result() as $row){
                  
-                  echo '<div class="col-md-2"><img src="'.$row->image.'"  class="forrent-img" ></img></div>';
-                  echo '<div class="col-md-3 forrent-sep" > Name: '.$row->name.'<br/>Address: '.$row->address.'<br/>Contact number: '.$row->number.'<br/>Email: '.$row->email.'<br/><br/><br/>';
-                  echo '<a href="'.base_url().'index.php/navigate/acceptrent/'.$row->id.'a'.$this->uri->segment(3).'" class="center btn btn-warning"> Accept as renter </a></div>';
+                  echo '<div class="col-lg-4 colorize"><center><img src="'.$row->image.'"  class="forrent-img" ></img></center>';
+                  echo '<br/><p> Name: '.$row->name.'<br/>Address: '.$row->address.'<br/>Contact number: '.$row->number.'<br/>Email: '.$row->email.'<br/>';
+                  echo '<a  data-toggle="modal" href="#myModal'.$row->id.'" class="center btn btn-warning"> Accept as renter </a><br/></p></div>';
+                   echo 
                   //echo '<div class="col-md-11"></div> ';
-            
+                  acceptAJAX($row->id);
+                 addModal($row->id,$x,$row->name);
+                
                }?>
              </div>
+             </div>
+           
 
-    
-     
+
+
+
+
+
+
+
+
+
+
+
+
+ <!--ajax for net view-->   
+ <?php 
+ function addModal($id,$postnum,$rname){
+echo '<!-- Modal -->
+  <div class="modal fade" id="myModal'.$id.'"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Accepting '.$rname.' as renter...</h4>
+        </div>
+        <div class="modal-body">
+        <div id="error'.$id.'"></div>
+        <p></p>
+        <form name="n'.$id.'" action="'.base_url().'index.php/navigate/acceptrent" method="POST">
+                                  Initial payment: <input id="in'.$id.'" type="input" name="initialp" />
+                                  <input type="hidden" value="'.$id.'" name="renter" />
+                                   <input type="hidden" value="'.$rname.'" name="rentername" />
+                                  <input type="hidden" value="'.$postnum.'" name="booknum" />
+                                </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" onclick="acceptRenter'.$id.'()" class="btn btn-primary">Accept</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->';
+
+ }
+function acceptAJAX($id){
+  //echo "<script type='text/javascript'>$('.button".$id."').click(function() { $.ajax({url: '".base_url()."index.php/navigate/interestedpeoplepage',type: 'POST',data: { post_id:'".$id."'},success: function (result) { document.m".$id.".submit();} }); });</script>";
+  echo '<script type="text/javascript">
+            function acceptRenter'.$id.'(){
+              var text= document.getElementById("in'.$id.'").value;
+              if( /^[0-9]+$/.test(text)){
+                document.n'.$id.'.submit();
+              }else{
+                 document.getElementById("error'.$id.'").innerHTML = "<div class=\"alert alert-danger\">Invalid input! Please place a number below</div>";
+              }
+                
+            }</script>';
+}
+?>    
 
 <script  language="javascript" type="text/javascript" src="<?php echo base_url();?>js/jquery.js"></script>
 

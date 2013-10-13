@@ -66,33 +66,70 @@
               <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"> My for rent books</a>
                 <a class="pull-right" href="postbookpage">Post a book for rent</a>
               <div id="collapseTwo" class="panel-collapse collapse in">
+                 <ul id="myTab" class="nav nav-tabs">
+                      <li class=""><a href="#pending" data-toggle="tab">Pending</a></li>
+                      <li class="active"><a href="#ongoing" data-toggle="tab">On Rent</a></li>
+                 </ul>
+               
+       
 
-               <?php foreach($value->result() as $row){
-                 
-                  echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></div>';
-                  echo '<div class="col-md-4 forrent-sep" > <a href="'.base_url().'index.php/navigate/deletebookpage/'.$row->id.'"class="close" aria-hidden="true">&times;</a>Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
-                  if(strcmp($row->rentedby,"")){
+
+       
+     
+      <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade" id="pending">
+          <?php foreach($value->result() as $row){
+                 if($row->rentedby==0){
                         if($row->num_i!=0){
+                           echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></div>';
+                           echo '<div class="col-md-4 forrent-sep" > <a href="'.base_url().'index.php/navigate/deletebookpage/'.$row->id.'"class="close" aria-hidden="true">&times;</a>Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
+                  
+                       
                           //echo '<br/>People interested: <a href="'.base_url().'index.php/navigate/interestedpeoplepage/'.$row->interested.'/'.$row->id.'">'.$row->num_i."</a>"; 
                           echo '<br/>People interested:<button class="button'.$row->id.'">'.$row->id.'</button>';
                           
                           interestedAJAX($row->id,$row->interested);
                         }else
                           echo '<br/>People interested: '.$row->num_i;
-                    }else
-                        echo '<br/>Rented by: '.$row->renter.' on '.$row->rentdate;
+                        echo '<br/>Posted on: '.$row->dateposted;
+                        echo '</div>';
+                        
+                  }
 
+                       
+                        
+            
+               }?>
+        </div>
+        <div class="tab-pane fade active in" id="ongoing">
+            <?php  foreach($value1->result() as $row){
 
-                  echo '<br/>Posted on: '.$row->dateposted;
-                  echo '</div>';
-                  echo '<form name="m'.$row->id.'" action="'.base_url().'index.php/navigate/interestedpeoplepage" method="POST">
+              if($row->rentedby!=0) {
+                    echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></div>';
+                    echo '<div class="col-md-4 forrent-sep" > <a href="'.base_url().'index.php/navigate/deletebookpage/'.$row->id.'"class="close" aria-hidden="true">&times;</a>Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
+                    echo ' Payments: '.$row->payment;    
+                    echo '<br/>Rented by: '.$row->renter;
+                    
+                        echo '<div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="'.calculate($row->payment,$row->price).'" aria-valuemin="0" aria-valuemax="100" style="width: '.calculate($row->payment,$row->price).'%;">
+                             
+                              </div>
+                              </div>';
+                         echo '</div>';
+                    }
+
+                                   
+                                echo '<form name="m'.$row->id.'" action="'.base_url().'index.php/navigate/interestedpeoplepage" method="POST">
                                   <input type="hidden" value="'.$row->id.'" name="post_id" />
                                   <input type="hidden" value="'.$row->interested.'" name="people" />
                                 </form>';
                         
             
                }?>
+        </div>
 
+      </div>
+    
                <?php //$ci =& get_instance();
                  // echo $ci->session->userdata('id');
                ?>
@@ -109,6 +146,12 @@
     
  <!---AJAX FOR SEARCHING INTERESTED USbgt5ERS-->
 <?php 
+
+function calculate($now,$total){
+  $zz=$now/$total;
+  $zz=$zz*100;
+  return $zz;
+}
 function interestedAJAX($id,$interested){
   echo "<script type='text/javascript'>$('.button".$id."').click(function() { $.ajax({url: '".base_url()."index.php/navigate/interestedpeoplepage',type: 'POST',data: { post_id:'".$id."', people:'".$interested."'},success: function (result) { document.m".$id.".submit();} }); });</script>";
 }

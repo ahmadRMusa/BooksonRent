@@ -42,30 +42,13 @@ class navigate extends CI_Controller {
 		$this->load->view('deletebook',$data);
 	}
 
-	public function interestedpeople()
-	{
-		$data['values'] = $this->session->userdata('currenti');
-		//$echo $data['values'];
-		foreach($data['values']->result() as $row){
-				echo $row->id;
-		}
-		//$this->load->view('interestedpeople',$data);
-	}
 
 	public function interestedpeoplepage()
 	{
-		
-		
 		$data['values'] = $this->connectdatabase->showi($_POST['people']);
 		$data['post_id']=$_POST['post_id'];
-		echo $_POST['people'];
+		
 		$this->load->view('interestedpeople',$data);
-
-		//($this->session->$userdata->result() as $row){
-		//		echo $row->id;
-		//}
-		//redirect('/navigate/interestedpeople');
-		//$this->load->view('dashboard',$data);
 	}
 	
 	public function deletebook()
@@ -79,6 +62,7 @@ class navigate extends CI_Controller {
 			redirect('/navigate/');
 		$data['values'] = $this->connectdatabase->show($this->session->userdata('id'));
 		$data['value']= $this->connectdatabase->showown($this->session->userdata('id'));
+		$data['value1']= $this->connectdatabase->showown($this->session->userdata('id'));
 		$data['val']= $this->connectdatabase->showownrent($this->session->userdata('id'));
 		$this->load->view('dashboard',$data);
 		
@@ -98,7 +82,15 @@ class navigate extends CI_Controller {
 		//$data['value']= $this->session->userdata('id');
 		//$this->load->view('forrent',$data);
 		echo "it worked";
-		
+		echo $_POST['initialp']." ".$_POST['renter']." ".$_POST['booknum'];
+		$values = array(
+					'id'		=>$_POST['booknum'],
+					'payment' 	=> $_POST['initialp'],
+					'rentedby'	=> $_POST['renter'],
+					'renter'		=> $_POST['rentername'],
+			);
+		$this->connectdatabase->acceptrenter($values);
+		redirect('navigate/dashboardpage');
 	}
 	public function iminterested()
 	{

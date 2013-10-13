@@ -28,7 +28,7 @@ class connectdatabase extends CI_Model
 				'price'		=> $values['price'],
 				'cnum'		=>$values['cnum'],
 				'condition'	=> $values['condition'],
-				'dateposted'=> date('y-j-m'),
+				'dateposted'=> date('y-m-j'),
 				'owner'		=> $this->session->userdata('id')
 							);
 
@@ -45,6 +45,20 @@ class connectdatabase extends CI_Model
 		$data = array(
 				'interested'=>$values['interested'],
 				'num_i' => $values['num_i']
+							);
+		$this->db->where('id',$values['id']);
+		
+		return $this->db->update('books',$data);
+		
+	}
+	public function acceptrenter($values)
+	{
+			$data = array(
+				
+				'rentedby'		=>$values['rentedby'],
+				'payment'		=>$values['payment'],
+				'renter'		=>$values['renter'],
+				'rentdate'		=>date('y-m-j')
 							);
 		$this->db->where('id',$values['id']);
 		
