@@ -44,7 +44,7 @@
          <div class="letter" id="accordion">
            <?php foreach($values->result() as $row)
             {
-                echo '<div class="col-md-3"><img class="img-size" src="'.base_url().$row->image.'"></img></div>';
+                echo '<div class="col-md-3"><img class="img-size" src="'.base_url().$row->image.'"></img><br/></div>';
                 echo '<div class="col-md-4 details">Personal Details:<a href="'.base_url().'index.php/navigate/editpage" class="link">[edit]</a><br/> ';
                 echo '<ul><li>Full Name: '.$row->name.'</li>';                    
                 echo '<li>Email: '.$row->email.'</li>'; 

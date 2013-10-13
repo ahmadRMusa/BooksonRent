@@ -1,7 +1,7 @@
 <?php doctype('html5') ?>
 <html>
 <head>
-	<title>Login</title>
+	<title>Edit Account</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <?php echo link_tag('css/bootstrap.css');
@@ -61,7 +61,7 @@
                 <label class="control-label"></label>
                 <div class="controls center">
                     <a class="btn btn-success btn-large" onclick="acceptpost1()">Submit</a>
-                    <?php echo anchor('navigate/','Cancel','class="btn btn-large btn-primary btn-danger"');?>
+                    <?php echo anchor('navigate/dashboardpage','Cancel','class="btn btn-large btn-primary btn-danger"');?>
                 </div>
             </div>
            
@@ -82,8 +82,9 @@
               var num= document.getElementById("num").value;
               var add= document.getElementById("adds").value;
               document.getElementById("error").innerHTML ="";
-              
-               if(p!=p1){
+              if(p.length<1){
+                document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Please input a new password</div>";
+              }else if(p!=p1){
                  document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Password doesnt match</div>";
               }else if(email.length<1){
                 document.getElementById("error").innerHTML = "<div class=\"alert alert-danger\">Email required</div>";

@@ -14,7 +14,7 @@
         <h1>Are you sure you want to delete this post?</h1>
         <?php echo form_open('navigate/deletebook','class="letter form-signin"');
             foreach($values->result() as $row){
-           echo '<img src="'.$row->image.'" class="small-size"/>';
+           echo '<img src="'.base_url().$row->image.'" class="small-size"/>';
            echo '<h2 class="form-signin-heading">'.$row->title.'</h2>';
            echo 'Author: '.$row->author.'<br/>';
            echo 'Date Posted: '.$row->dateposted.'<br/>';

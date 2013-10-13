@@ -39,6 +39,7 @@ class connectdatabase extends CI_Model
 	public function showall()
 	{
 		$this->db->where('owner !=', $this->session->userdata('id'));
+		$this->db->where('rentedby', 0);
 		return $this->db->get('books');
 	}
 	public function iminterested($values)
@@ -70,14 +71,29 @@ class connectdatabase extends CI_Model
 	{
 			$data = array(
 				'email' 	=> $values['email'],
-					'password'	=> $values['password'],
+					'password'	=> md5($values['password']),
 					'name'		=> $values['name'],
 					'number'	=> $values['number'],
 					'address'	=> $values['address']
 							);
-		$this->db->where('id',$values['id']);
+		$this->db->where('id',$this->session->userdata('id'));
 		
-		return $this->db->update('books',$data);
+		return $this->db->update('accounts',$data);
+		
+	}
+		public function updateprof1($values)
+	{
+			$data = array(
+				'email' 	=> $values['email'],
+					'password'	=> md5($values['password']),
+					'name'		=> $values['name'],
+					'number'	=> $values['number'],
+					'address'	=> $values['address'],
+					'image'		=> $values['image']
+							);
+		$this->db->where('id',$this->session->userdata('id'));
+		
+		return $this->db->update('accounts',$data);
 		
 	}
 	public function updatePayments($values)
@@ -124,7 +140,7 @@ class connectdatabase extends CI_Model
 	public function search($id)
 	{
 		$this->db->where('owner !=', $this->session->userdata('id'));
-		$this->db->where('rentedby !=', $this->session->userdata('id'));
+		$this->db->where('rentedby', 0);
 		$this->db->like('title',$id);
 		
 		return $this->db->get('books');

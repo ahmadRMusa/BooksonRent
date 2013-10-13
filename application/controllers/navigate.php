@@ -106,7 +106,8 @@ class navigate extends CI_Controller {
 		$this->load->view('register');
 	}
 	public function editpage()
-	{
+	{	if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		$data['values'] = $this->connectdatabase->show($this->session->userdata('id'));
 		$this->load->view('edit',$data);
 	}
@@ -246,12 +247,20 @@ class navigate extends CI_Controller {
 			
 			
 		}
+	}
 
-		public function updateprofile()
-	{
+		public function updateprofile(){
+		if($this->session->userdata('id')==null)
+			redirect('/navigate/');
 		
-		if($_POST['input1']==null){
-				$values = array(
+		$config['upload_path'] = './images/';
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['encrypt_name']=true;
+		
+		$this->upload->initialize($config);
+		if ( ! $this->upload->do_upload())
+		{
+			$values = array(
 					'email' 	=> $_POST['email'],
 					'password'	=> $_POST['password'],
 					'name'		=> $_POST['name'],
@@ -263,17 +272,6 @@ class navigate extends CI_Controller {
 				
 				 $this->dashboardpage();
 			}
-		}else{
-		$config['upload_path'] = './images/';
-		$config['allowed_types'] = 'gif|jpg|png';
-		$config['encrypt_name']=true;
-		
-		$this->upload->initialize($config);
-		if ( ! $this->upload->do_upload())
-		{
-			$error = array('error' => $this->upload->display_errors());
-
-			echo $error['error'];
 		}
 		else
 		{
@@ -295,7 +293,7 @@ class navigate extends CI_Controller {
 			}
 			
 			
-		}}
+		}
 			
 
 		
