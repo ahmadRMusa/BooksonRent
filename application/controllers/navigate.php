@@ -120,7 +120,7 @@ class navigate extends CI_Controller {
 	public function deletebookpage()
 	{	if($this->session->userdata('id')==null)
 			redirect('/navigate/');
-		$data['values'] = $this->connectdatabase->showbook($this->uri->segment(3));
+		$data['values'] = $this->connectdatabase->showbooktodel($this->uri->segment(3));
 		$this->load->view('deletebook',$data);
 	}
 

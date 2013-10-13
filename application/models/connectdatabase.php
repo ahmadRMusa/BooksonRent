@@ -169,7 +169,12 @@ class connectdatabase extends CI_Model
 		return $this->db->get('accounts');
 	}
 
-
+	public function showbooktodel($id)
+	{
+		$this->db->where('id',$id);
+		$this->db->where('owner',$this->session->userdata('id'));
+		return $this->db->get('books');
+	}
 
 	public function delete($id)
 	{
