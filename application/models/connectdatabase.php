@@ -65,6 +65,16 @@ class connectdatabase extends CI_Model
 		return $this->db->update('books',$data);
 		
 	}
+	public function updatePayments($values)
+	{
+			$data = array(
+					'payment'		=>$values['payment'],
+				);
+		$this->db->where('id',$values['id']);
+		
+		return $this->db->update('books',$data);
+		
+	}
 	public function show($id)
 	{
 		$this->db->where('id',$id);
@@ -82,6 +92,11 @@ class connectdatabase extends CI_Model
 	public function showown($id)
 	{
 		$this->db->where('owner',$id);
+		return $this->db->get('books');
+	}
+	public function refreshUpdate($id)
+	{
+		$this->db->where('id',$id);
 		return $this->db->get('books');
 	}
 	public function showownrent($id)

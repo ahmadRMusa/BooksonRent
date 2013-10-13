@@ -37,7 +37,7 @@
         </div><!--/.navbar-collapse -->
       </div>
     </div>
-    <div class="header"><h1>People interested in your book:</h1></div>
+    <div class="header"><h1>People interested in <?php echo $title;?>:</h1></div>
     <hr></hr>
   <div class="container">
     <div class="row">
@@ -47,9 +47,9 @@
                   echo '<div class="col-lg-4 colorize"><center><img src="'.$row->image.'"  class="forrent-img" ></img></center>';
                   echo '<br/><p> Name: '.$row->name.'<br/>Address: '.$row->address.'<br/>Contact number: '.$row->number.'<br/>Email: '.$row->email.'<br/>';
                   echo '<a  data-toggle="modal" href="#myModal'.$row->id.'" class="center btn btn-warning"> Accept as renter </a><br/></p></div>';
-                   echo 
+                  
                   //echo '<div class="col-md-11"></div> ';
-                  acceptAJAX($row->id);
+                  acceptAJAX($row->id,$price);
                  addModal($row->id,$x,$row->name);
                 
                }?>
@@ -99,12 +99,14 @@ echo '<!-- Modal -->
   </div><!-- /.modal -->';
 
  }
-function acceptAJAX($id){
+function acceptAJAX($id,$price){
   //echo "<script type='text/javascript'>$('.button".$id."').click(function() { $.ajax({url: '".base_url()."index.php/navigate/interestedpeoplepage',type: 'POST',data: { post_id:'".$id."'},success: function (result) { document.m".$id.".submit();} }); });</script>";
   echo '<script type="text/javascript">
             function acceptRenter'.$id.'(){
               var text= document.getElementById("in'.$id.'").value;
-              if( /^[0-9]+$/.test(text)){
+              if(text>'.$price.'){
+                 document.getElementById("error'.$id.'").innerHTML = "<div class=\"alert alert-danger\">Payment exceeds rental amount!</div>";
+              }else if( /^[0-9]+$/.test(text)){
                 document.n'.$id.'.submit();
               }else{
                  document.getElementById("error'.$id.'").innerHTML = "<div class=\"alert alert-danger\">Invalid input! Please place a number below</div>";

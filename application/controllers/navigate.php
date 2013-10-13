@@ -23,6 +23,71 @@ class navigate extends CI_Controller {
 		$this->load->model('connectdatabase');	
 			
 	}
+	public function display(){
+		
+		$data['values'] = $this->connectdatabase->show($_POST['p']);
+
+		foreach($data['values']->result() as $row)
+            {
+                echo '<img style="height:120;width:100px;" src="'.$row->image.'"></img>';
+                echo '<br/>Personal Details:<br/> ';
+                echo '<ul><li>Full Name: '.$row->name.'</li>';                    
+                echo '<li>Email: '.$row->email.'</li>'; 
+                echo '<li>Address: '.$row->address.'</li>';
+                echo '<li>Contact Number: '.$row->number.'</li>'; 
+                echo '</ul>';
+             }                         
+               
+            
+	}
+	public function updateP(){
+		
+		$trueA['amt']=$this->connectdatabase->refreshUpdate($_POST['post']);
+		foreach($trueA['amt']->result() as $row)
+            {	
+            	$trueAMT=$row->payment;
+            	$truePrice=$row->price;
+            }
+
+		$total = $trueAMT+$_POST['payment'];
+		if($total<$truePrice||$total=$truePrice){
+
+
+		$values = array(
+					'id'		=>$_POST['post'],
+					'payment' 	=> $total
+					
+			);
+		$this->connectdatabase->updatePayments($values);
+		$data['values']=$this->connectdatabase->refreshUpdate($_POST['post']);
+		foreach($data['values']->result() as $row)
+            {
+                     echo '<div id="uBlock'.$row->id.'">';
+                    echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></div>';
+                    echo '<div class="col-md-4 forrent-sep" > <a href="'.base_url().'index.php/navigate/deletebookpage/'.$row->id.'"class="close" aria-hidden="true">&times;</a>Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
+                    echo '<br/>Payments: '.$row->payment;    
+                    echo '<br/>Rented by: <a data-toggle="modal" href="#myModal'.$row->id.'" id="d'.$row->id.'">'.$row->renter.'</a>';
+                    echo '<br/>Progress: '.$this->calculate($row->payment,$row->price).'%';
+                        echo '<div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="'.$this->calculate($row->payment,$row->price).'" aria-valuemin="0" aria-valuemax="100" style="width: '.$this->calculate($row->payment,$row->price).'%;">
+                             
+                              </div>
+                              </div>';
+                      echo '<center><a data-toggle="modal" href="#updateModal'.$row->id.'" id="update'.$row->id.'" class="btn btn-warning" style="margin-bottom:10px;margin-top:0px;">Update</a></center>';
+                         echo '</div>';
+                        
+                   
+                         echo '</div>';
+             }         
+          }
+            
+	}
+	public function calculate($now,$total){
+  			$zz=$now/$total;
+  			$zz=$zz*100;
+ 			 return number_format($zz, 2, '.', '');
+	}
+
 	public function index()
 	{
 		$this->load->view('login');
@@ -44,9 +109,13 @@ class navigate extends CI_Controller {
 
 
 	public function interestedpeoplepage()
-	{
+	{	
+	
+		
 		$data['values'] = $this->connectdatabase->showi($_POST['people']);
 		$data['post_id']=$_POST['post_id'];
+		$data['title']=$_POST['title'];
+		$data['price']=$_POST['price'];
 		
 		$this->load->view('interestedpeople',$data);
 	}

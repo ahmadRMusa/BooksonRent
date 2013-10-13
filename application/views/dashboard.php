@@ -80,13 +80,13 @@
         <div class="tab-pane fade" id="pending">
           <?php foreach($value->result() as $row){
                  if($row->rentedby==0){
-                        if($row->num_i!=0){
+                       
                            echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></div>';
                            echo '<div class="col-md-4 forrent-sep" > <a href="'.base_url().'index.php/navigate/deletebookpage/'.$row->id.'"class="close" aria-hidden="true">&times;</a>Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
                   
-                       
+                        if($row->num_i!=0){
                           //echo '<br/>People interested: <a href="'.base_url().'index.php/navigate/interestedpeoplepage/'.$row->interested.'/'.$row->id.'">'.$row->num_i."</a>"; 
-                          echo '<br/>People interested:<button class="button'.$row->id.'">'.$row->id.'</button>';
+                          echo '<br/>People interested:<button class="button'.$row->id.'">'.$row->num_i.'</button>';
                           
                           interestedAJAX($row->id,$row->interested);
                         }else
@@ -96,7 +96,12 @@
                         
                   }
 
-                       
+                         echo '<form name="m'.$row->id.'" action="'.base_url().'index.php/navigate/interestedpeoplepage" method="POST">
+                                  <input type="hidden" value="'.$row->id.'" name="post_id" />
+                                  <input type="hidden" value="'.$row->interested.'" name="people" />
+                                  <input type="hidden" value="'.$row->price.'" name="price" />
+                                  <input type="hidden" value="'.$row->title.'" name="title" />
+                                </form>';
                         
             
                }?>
@@ -105,24 +110,31 @@
             <?php  foreach($value1->result() as $row){
 
               if($row->rentedby!=0) {
+                    echo '<div id="uBlock'.$row->id.'">';
                     echo '<div class="col-md-2"><img src="'.base_url().$row->image.'"  class="forrent-img" ></img></div>';
                     echo '<div class="col-md-4 forrent-sep" > <a href="'.base_url().'index.php/navigate/deletebookpage/'.$row->id.'"class="close" aria-hidden="true">&times;</a>Title: '.$row->title.'<br/>Author: '.$row->author.'<br/>Rent Price: '.$row->price;
-                    echo ' Payments: '.$row->payment;    
-                    echo '<br/>Rented by: '.$row->renter;
-                    
+                    echo '<br/>Payments: '.$row->payment;    
+                    echo '<br/>Rented by: <a data-toggle="modal" href="#myModal'.$row->id.'" id="d'.$row->id.'">'.$row->renter.'</a>';
+                    echo '<br/>Progress: '.calculate($row->payment,$row->price).'%';
                         echo '<div class="progress">
                               <div class="progress-bar" role="progressbar" aria-valuenow="'.calculate($row->payment,$row->price).'" aria-valuemin="0" aria-valuemax="100" style="width: '.calculate($row->payment,$row->price).'%;">
                              
                               </div>
                               </div>';
+                      echo '<center><a data-toggle="modal" href="#updateModal'.$row->id.'" id="update'.$row->id.'" class="btn btn-warning" style="margin-bottom:10px;margin-top:0px;">Update</a></center>';
                          echo '</div>';
+                         
+                   
+                         echo '</div>';
+                         updatePayment($row->id,$row->payment,$row->price);
+                     addUpdateModal($row->id,$row->payment,$row->title);
+                    addModal($row->id);
+                    seeDetails($row->rentedby,$row->id);
+                    
                     }
 
                                    
-                                echo '<form name="m'.$row->id.'" action="'.base_url().'index.php/navigate/interestedpeoplepage" method="POST">
-                                  <input type="hidden" value="'.$row->id.'" name="post_id" />
-                                  <input type="hidden" value="'.$row->interested.'" name="people" />
-                                </form>';
+                              
                         
             
                }?>
@@ -146,20 +158,131 @@
     
  <!---AJAX FOR SEARCHING INTERESTED USbgt5ERS-->
 <?php 
+function addModal($id){
+echo '<!-- Modal -->
+  <div class="modal fade" id="myModal'.$id.'"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Renter Account Details</h4>
+        </div>
+        <div class="modal-body ">
+        <div id="xm'.$id.'"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->';
 
+ }
+function addUpdateModal($id,$p,$t){
+echo '<!-- Modal -->
+  <div class="modal fade" id="updateModal'.$id.'"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Update payments:'.$t.'</h4>
+        </div>
+        <div class="modal-body ">
+        <div id="invalidi'.$id.'"></div>
+        Input amount: <input id="updatep'.$id.'"></input>
+        </div>
+        <div class="modal-footer">
+          
+          <button id="readyUpdate'.$id.'" type="button" class="btn btn-primary" >Update</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->';
+
+ }
 function calculate($now,$total){
   $zz=$now/$total;
   $zz=$zz*100;
-  return $zz;
+  return number_format($zz, 2, '.', '');
 }
 function interestedAJAX($id,$interested){
-  echo "<script type='text/javascript'>$('.button".$id."').click(function() { $.ajax({url: '".base_url()."index.php/navigate/interestedpeoplepage',type: 'POST',data: { post_id:'".$id."', people:'".$interested."'},success: function (result) { document.m".$id.".submit();} }); });</script>";
+  echo "<script type='text/javascript'>$('.button".$id."').click(function() { $.ajax({url: '".base_url()."index.php/navigate/interestedpeoplepage',type: 'POST',data: { post_id:'".$id."', people:'".$interested."' },success: function (result) { document.m".$id.".submit();} }); });</script>";
+}
+function seeDetails($id,$rowid){
+  echo '<script type="text/javascript">
+         $(document).ready(function() {
+
+            $("#d'.$rowid.'").click(function() {                
+              $.ajax({
+                   url: \''.base_url().'index.php/navigate/display\',
+                   type: \'POST\',
+                   data: {p:\''.$id.'\'},
+                   success: function(response){
+                     $("#xm'.$rowid.'").html(response); 
+                        
+                   }
+              });
+          
+          
+          });
+        });
+      </script>';
+}
+function updatePayment($id,$amt,$price){
+  echo '<script type="text/javascript">
+         $(document).ready(function() {
+
+            $("#readyUpdate'.$id.'").click(function() {                
+              var text= document.getElementById("updatep'.$id.'").value;
+              if(text>'.$price.'){
+                document.getElementById("invalidi'.$id.'").innerHTML = "<div class=\"alert alert-danger\">The payment exceeds the rental price!</div>";
+              }else if( /^[0-9]+$/.test(text)){
+                $.ajax({
+                   url: \''.base_url().'index.php/navigate/updateP\',
+                   type: \'POST\',
+                   data: {post:\''.$id.'\' , amt:\''.$amt.'\' ,payment:text},
+                   success: function(response){
+                    document.getElementById("uBlock'.$id.'").innerHTML ="";
+                     $("#uBlock'.$id.'").html(response); 
+                        $(\'#updateModal'.$id.'\').modal(\'hide\');
+                      document.getElementById("updatep'.$id.'").value ="";
+                      document.getElementById("invalidi'.$id.'").innerHTML="";
+                     
+                   }
+              });}else{
+                 document.getElementById("invalidi'.$id.'").innerHTML = "<div class=\"alert alert-danger\">Invalid input! Please place a number below</div>";
+                 
+              }
+              
+          
+          
+          });
+        });
+      </script>';
 }
 ?>
-</script>
 
+<!-- 
+ echo '<script type="text/javascript">
+          $(document).ready(function() {
 
-
+            $("#d'.$id.'").click(function() {                
+              $.ajax({
+                   url: \''.base_url().'index.php/navigate/display\',
+                   type: \'POST\',
+                   data: {p:\''.$id.'\'},
+                   success: function(response){
+                     $("#r'.$id.'").html(response); 
+                        
+                   }
+              });
+          
+          
+          });
+        });
+      </script>';
+ -->
 <script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/bootstrap.min.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo base_url();?>js/respond.min.js"></script>
